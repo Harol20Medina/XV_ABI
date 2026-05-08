@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #f8fafc;
+}
+
+body, button, input, textarea {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.font-script {
+  font-family: 'Great Vibes', cursive;
+}
+
+::selection {
+  background: rgba(99, 102, 241, 0.18);
+}
+
+button {
+  transition: background-color 0.2s ease;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
