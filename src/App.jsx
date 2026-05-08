@@ -248,7 +248,7 @@ export default function App() {
             <div className="bg-[#A8E1B5] text-white p-8 rounded-[3rem] shadow-xl">
                <MessageCircle size={28} className="mx-auto mb-4" />
                <h3 className="font-serif text-3xl mb-3 italic">Asistencia</h3>
-               <p className="text-[8px] uppercase tracking-widest mb-5 font-bold opacity-90">Confirmar antes del 10 de Mayo</p>
+               <p className="text-[8px] uppercase tracking-widest mb-5 font-bold opacity-90">Confirmar antes del 17 de Mayo</p>
                <a 
                  href={whatsappLink}
                  target="_blank"
