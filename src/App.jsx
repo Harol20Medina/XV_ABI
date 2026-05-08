@@ -5,7 +5,10 @@ import {
   Clock,
   MessageCircle,
   Crown,
-  Heart
+  Heart,
+  Play,
+  Pause,
+  Music
 } from 'lucide-react';
 
 /**
@@ -40,42 +43,44 @@ function useCountdown(targetDate) {
 export default function App() {
   const audioRef = useRef(null);
   const countdown = useCountdown(eventDate);
-  const [audioPlaying, setAudioPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  // Auto-play al cargar la página (FORZADO)
-  useEffect(() => {
-    // Intentar reproducir inmediatamente
-    const playAudio = () => {
-      if (audioRef.current && !audioPlaying) {
-        audioRef.current.play()
-          .then(() => {
-            setAudioPlaying(true);
-            console.log("🎵 Música reproduciéndose automáticamente");
-          })
-          .catch((error) => {
-            console.log("Autoplay bloqueado, reintentando...", error);
-            // Si falla, reintentar al cargar completamente la página
-            document.addEventListener('click', playAudio, { once: true });
-          });
+  // Función para play/pause
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+        console.log("Música pausada");
+      } else {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true);
+              console.log("Música reproduciéndose");
+            })
+            .catch((error) => {
+              console.log("Error al reproducir:", error);
+              alert("Haz clic en cualquier parte de la pantalla para activar el audio");
+              // Forzar con un click del usuario
+              const onceClick = () => {
+                audioRef.current.play();
+                setIsPlaying(true);
+                document.removeEventListener('click', onceClick);
+              };
+              document.addEventListener('click', onceClick);
+            });
+        }
       }
-    };
-    
-    // Pequeño retraso para asegurar que el DOM está listo
-    setTimeout(playAudio, 100);
-    
-    // También intentar cuando la página termine de cargar
-    window.addEventListener('load', playAudio);
-    
-    return () => {
-      window.removeEventListener('load', playAudio);
-    };
-  }, [audioPlaying]);
+    }
+  };
 
   // Calendario Mayo 2026
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
-  const startDayPadding = 5; // 24 de Mayo es sábado
+  const startDayPadding = 5;
 
-  // WhatsApp actualizado: +51 934 119 126
+  // WhatsApp: +51 934 119 126
   const whatsappNumber = "51934119126";
   const whatsappMessage = encodeURIComponent("¡Hola! ✨ Quiero confirmar mi asistencia a los XV años de Abigail. ¡No me lo pierdo por nada! 💃🎉");
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
@@ -92,14 +97,14 @@ export default function App() {
           backgroundRepeat: 'no-repeat'
         }}
       >
-        {/* Capa blanca semitransparente para legibilidad */}
+        {/* Capa blanca semitransparente */}
         <div className="absolute inset-0 bg-white/75 backdrop-blur-[1px]"></div>
         
         {/* Contenido principal */}
         <div className="relative z-10 flex flex-col">
           
           {/* Header con foto principal */}
-          <header className="pt-20 pb-12 px-8 text-center">
+          <header className="pt-20 pb-8 px-8 text-center">
             <Crown className="w-8 h-8 text-[#A8E1B5] mx-auto mb-6 opacity-80" />
             <p className="text-[10px] uppercase tracking-[0.7em] text-[#6BA37A] mb-6 font-semibold">Mis XV Años</p>
             <h1 className="text-6xl font-serif text-[#2D3A32] mb-10 tracking-tight">Abigail</h1>
@@ -109,7 +114,32 @@ export default function App() {
                 <img src="abi.jpeg" alt="Abigail" className="w-full h-full object-cover" />
               </div>
             </div>
-            <p className="mt-12 text-sm font-light text-stone-500 italic max-w-xs mx-auto">
+            
+            {/* REPRODUCTOR DE MÚSICA ELEGANTE - CORREGIDO */}
+            <div className="mt-8 flex justify-center">
+              <div className="bg-white/90 backdrop-blur-md rounded-full px-5 py-2 shadow-lg border border-[#A8E1B5]/40 inline-flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#A8E1B5]/20 flex items-center justify-center">
+                  <Music size={14} className="text-[#6BA37A]" />
+                </div>
+                <div className="text-left">
+                  <p className="text-[8px] uppercase tracking-wider text-[#6BA37A] font-bold">Canción</p>
+                  <p className="text-[10px] font-serif text-[#2D3A32]">Música especial</p>
+                </div>
+                <button
+                  onClick={togglePlay}
+                  className="w-10 h-10 rounded-full bg-gradient-to-r from-[#A8E1B5] to-[#6BA37A] shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center transform hover:scale-105 active:scale-95"
+                  style={{ cursor: 'pointer' }}
+                >
+                  {isPlaying ? (
+                    <Pause size={18} className="text-white" />
+                  ) : (
+                    <Play size={18} className="text-white ml-0.5" />
+                  )}
+                </button>
+              </div>
+            </div>
+            
+            <p className="mt-8 text-sm font-light text-stone-500 italic max-w-xs mx-auto">
               "Un día para soñar, un momento para recordar, y una vida entera para agradecer."
             </p>
           </header>
@@ -160,7 +190,7 @@ export default function App() {
               </div>
             </div>
             
-            {/* Calendario marcando el día 24 */}
+            {/* Calendario */}
             <div className="bg-white/80 backdrop-blur p-6 rounded-3xl border border-[#A8E1B5]/30 max-w-[280px] mx-auto">
               <p className="text-[10px] uppercase tracking-widest text-[#6BA37A] mb-4 font-bold">Mayo 2026</p>
               <div className="grid grid-cols-7 gap-y-2 text-[9px] font-medium text-stone-400">
@@ -200,7 +230,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* Confirmación WhatsApp con número actualizado */}
+          {/* WhatsApp */}
           <section className="px-8 py-20 text-center">
             <div className="bg-[#A8E1B5] text-white p-12 rounded-[3.5rem] shadow-xl">
                <MessageCircle size={28} className="mx-auto mb-6" />
@@ -218,7 +248,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* Footer con foto de recuerdo */}
+          {/* Footer */}
           <footer className="px-8 py-24 text-center">
             <h3 className="font-serif text-3xl mb-12 italic">Recuerdos</h3>
             <div className="relative mx-auto max-w-[280px]">
@@ -234,8 +264,8 @@ export default function App() {
           </footer>
         </div>
 
-        {/* Audio con autoplay FORZADO */}
-        <audio ref={audioRef} src="music.mpeg" loop playsInline autoPlay muted={false} />
+        {/* Audio - Asegurar que el src es correcto */}
+        <audio ref={audioRef} src="music.mpeg" loop preload="auto" />
       </div>
 
       <style>{`
