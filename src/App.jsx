@@ -3,12 +3,8 @@ import {
   MapPin,
   Calendar,
   Clock,
-  Gift,
-  Sparkles,
   MessageCircle,
   Crown,
-  Play,
-  Pause,
   Heart
 } from 'lucide-react';
 
@@ -44,63 +40,43 @@ function useCountdown(targetDate) {
 export default function App() {
   const audioRef = useRef(null);
   const countdown = useCountdown(eventDate);
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-  const [audioStarted, setAudioStarted] = useState(false);
+  const [audioPlaying, setAudioPlaying] = useState(false);
 
-  // Intento automático de reproducción al cargar la página
+  // Auto-play al cargar la página (FORZADO)
   useEffect(() => {
-    const tryAutoPlay = () => {
-      if (audioRef.current && !audioStarted) {
+    // Intentar reproducir inmediatamente
+    const playAudio = () => {
+      if (audioRef.current && !audioPlaying) {
         audioRef.current.play()
           .then(() => {
-            setIsAudioPlaying(true);
-            setAudioStarted(true);
+            setAudioPlaying(true);
+            console.log("🎵 Música reproduciéndose automáticamente");
           })
           .catch((error) => {
-            console.log("Autoplay bloqueado, esperando interacción del usuario:", error);
+            console.log("Autoplay bloqueado, reintentando...", error);
+            // Si falla, reintentar al cargar completamente la página
+            document.addEventListener('click', playAudio, { once: true });
           });
       }
     };
     
-    tryAutoPlay();
+    // Pequeño retraso para asegurar que el DOM está listo
+    setTimeout(playAudio, 100);
     
-    const handleUserInteraction = () => {
-      if (audioRef.current && !audioStarted) {
-        audioRef.current.play()
-          .then(() => {
-            setIsAudioPlaying(true);
-            setAudioStarted(true);
-          })
-          .catch(() => {});
-      }
-    };
-    
-    window.addEventListener('click', handleUserInteraction);
-    window.addEventListener('touchstart', handleUserInteraction);
+    // También intentar cuando la página termine de cargar
+    window.addEventListener('load', playAudio);
     
     return () => {
-      window.removeEventListener('click', handleUserInteraction);
-      window.removeEventListener('touchstart', handleUserInteraction);
+      window.removeEventListener('load', playAudio);
     };
-  }, [audioStarted]);
+  }, [audioPlaying]);
 
-  const toggleAudio = () => {
-    if (audioRef.current) {
-      if (isAudioPlaying) {
-        audioRef.current.pause();
-        setIsAudioPlaying(false);
-      } else {
-        audioRef.current.play();
-        setIsAudioPlaying(true);
-        setAudioStarted(true);
-      }
-    }
-  };
-
+  // Calendario Mayo 2026
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
-  const startDayPadding = 5;
+  const startDayPadding = 5; // 24 de Mayo es sábado
 
-  const whatsappNumber = "51925564716";
+  // WhatsApp actualizado: +51 934 119 126
+  const whatsappNumber = "51934119126";
   const whatsappMessage = encodeURIComponent("¡Hola! ✨ Quiero confirmar mi asistencia a los XV años de Abigail. ¡No me lo pierdo por nada! 💃🎉");
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
@@ -116,19 +92,12 @@ export default function App() {
           backgroundRepeat: 'no-repeat'
         }}
       >
-        {/* Capa blanca semitransparente para que se lea bien el texto */}
+        {/* Capa blanca semitransparente para legibilidad */}
         <div className="absolute inset-0 bg-white/75 backdrop-blur-[1px]"></div>
         
-        {/* Contenido principal (con relative para estar encima de la capa) */}
+        {/* Contenido principal */}
         <div className="relative z-10 flex flex-col">
-          {/* Botón de audio flotante */}
-          <button 
-            onClick={toggleAudio}
-            className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-white/90 backdrop-blur rounded-full shadow-lg flex items-center justify-center border border-[#A8E1B5]/40"
-          >
-            {isAudioPlaying ? <Pause size={20} className="text-[#6BA37A]" /> : <Play size={20} className="text-[#6BA37A] fill-current ml-1" />}
-          </button>
-
+          
           {/* Header con foto principal */}
           <header className="pt-20 pb-12 px-8 text-center">
             <Crown className="w-8 h-8 text-[#A8E1B5] mx-auto mb-6 opacity-80" />
@@ -191,7 +160,7 @@ export default function App() {
               </div>
             </div>
             
-            {/* Calendario */}
+            {/* Calendario marcando el día 24 */}
             <div className="bg-white/80 backdrop-blur p-6 rounded-3xl border border-[#A8E1B5]/30 max-w-[280px] mx-auto">
               <p className="text-[10px] uppercase tracking-widest text-[#6BA37A] mb-4 font-bold">Mayo 2026</p>
               <div className="grid grid-cols-7 gap-y-2 text-[9px] font-medium text-stone-400">
@@ -231,7 +200,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* Confirmación WhatsApp */}
+          {/* Confirmación WhatsApp con número actualizado */}
           <section className="px-8 py-20 text-center">
             <div className="bg-[#A8E1B5] text-white p-12 rounded-[3.5rem] shadow-xl">
                <MessageCircle size={28} className="mx-auto mb-6" />
@@ -245,7 +214,7 @@ export default function App() {
                >
                  Confirmar asistencia por WhatsApp
                </a>
-               <p className="text-[8px] mt-4 opacity-70">✨ Haz clic y envía el mensaje automático ✨</p>
+               <p className="text-[8px] mt-4 opacity-70">✨ Enviarás mensaje al +51 934 119 126 ✨</p>
             </div>
           </section>
 
@@ -265,16 +234,26 @@ export default function App() {
           </footer>
         </div>
 
-        {/* Audio */}
-        <audio ref={audioRef} src="music.mpeg" loop playsInline />
+        {/* Audio con autoplay FORZADO */}
+        <audio ref={audioRef} src="music.mpeg" loop playsInline autoPlay muted={false} />
       </div>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
-        body { font-family: 'Playfair Display', serif; margin: 0; padding: 0; }
-        .font-serif { font-family: 'Playfair Display', serif; }
-        ::-webkit-scrollbar { width: 0px; }
-        * { -webkit-tap-highlight-color: transparent; }
+        body { 
+          font-family: 'Playfair Display', serif; 
+          margin: 0; 
+          padding: 0; 
+        }
+        .font-serif { 
+          font-family: 'Playfair Display', serif; 
+        }
+        ::-webkit-scrollbar { 
+          width: 0px; 
+        }
+        * { 
+          -webkit-tap-highlight-color: transparent; 
+        }
       `}</style>
     </div>
   );
