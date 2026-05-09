@@ -81,7 +81,7 @@ export default function App() {
       <div 
         className="relative w-full max-w-md bg-white shadow-2xl overflow-hidden min-h-screen sm:min-h-0 sm:rounded-[3.5rem] border border-[#A8E1B5]/10 flex flex-col"
         style={{
-          backgroundImage: `url(flores.jpeg)`,
+          backgroundImage: `url(flores.jpg)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
