@@ -102,7 +102,7 @@ export default function App() {
             <div className="relative mx-auto w-64 h-[400px]">
               <div className="absolute inset-0 border border-[#A8E1B5]/40 -m-3 rounded-t-full"></div>
               <div className="w-full h-full rounded-t-full overflow-hidden shadow-xl border-4 border-white">
-                <img src="abi.jpeg" alt="Abigail" className="w-full h-full object-cover" />
+                <img src="abi.jpg" alt="Abigail" className="w-full h-full object-cover" />
               </div>
             </div>
             
