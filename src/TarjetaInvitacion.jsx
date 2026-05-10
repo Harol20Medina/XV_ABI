@@ -1,29 +1,30 @@
 import React, { useState } from 'react';
 import { X, Heart, MapPin, Calendar, Clock, Send, Crown, Sparkles, Users } from 'lucide-react';
 
+// 👇 AQUÍ CAMBIAS LA CANTIDAD DE PERSONAS FÁCILMENTE
+const CANTIDAD_PERSONAS = 3; // Cambia este número: 2, 3, 4, 5, etc.
+
 const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   if (!isOpen) return null;
 
   const handleConfirmAndSend = () => {
-    // Mostrar la pantalla de éxito
     setShowSuccess(true);
     
-    // Mensaje personalizado para WhatsApp
+    // Mensaje personalizado para WhatsApp con la cantidad dinámica
     const mensajeWhatsApp = encodeURIComponent(
+      `✨ Confirmación de Asistencia - XV Años de Abigail ✨\n\n` +
       `¡Hola! Quiero confirmar mi asistencia a los XV años de Abigail. 🎉\n\n` +
-      `✅ Invitación válida para 2 personas\n\n` +
-      `¡No me lo pierdo por nada! 💃🎉`
+      `✅ Invitación válida para ${CANTIDAD_PERSONAS} persona${CANTIDAD_PERSONAS !== 1 ? 's' : ''}\n\n` +
+      `¡No me lo pierdo por nada! 💃🎉\n\n` +
+      `🌟 ¡Qué comience la fiesta! 🌟`
     );
     
     const whatsappNumber = "51934119126";
     const whatsappLink = `https://wa.me/${whatsappNumber}?text=${mensajeWhatsApp}`;
     
-    // Llamar a la función de confirmación
     if (onConfirm) onConfirm();
-    
-    // Abrir WhatsApp inmediatamente
     window.open(whatsappLink, '_blank');
   };
 
@@ -42,12 +43,9 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
           backgroundPosition: 'center',
         }}
       >
-        {/* Overlay de fondo */}
         <div className="absolute inset-0 bg-white/85 backdrop-blur-sm"></div>
         
-        {/* Contenido */}
         <div className="relative z-10 p-5">
-          {/* Botón cerrar - SIEMPRE visible */}
           <button
             onClick={handleClose}
             className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 hover:bg-white shadow-md flex items-center justify-center transition-all hover:scale-105 active:scale-95 z-20"
@@ -55,7 +53,6 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
             <X size={16} className="text-[#4A6B55]" />
           </button>
           
-          {/* Encabezado */}
           <div className="text-center mb-5">
             <Crown className="w-10 h-10 text-[#5A7D66] mx-auto mb-2 opacity-80" />
             <h2 className="text-xl font-serif text-[#0F1F18] mb-1">
@@ -69,17 +66,18 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
           
           {!showSuccess ? (
             <>
-              {/* Invitación válida para 2 personas */}
               <div className="bg-gradient-to-r from-[#A8E1B5]/30 to-[#6BA37A]/30 rounded-2xl p-4 mb-5 border border-[#A8E1B5]/50 text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <Users size={18} className="text-[#4A6B55]" />
                   <span className="text-sm font-bold text-[#2D3A32]">Invitación válida para</span>
                 </div>
-                <p className="text-2xl font-serif font-bold text-[#0F1F18]">2 personas</p>
-                <p className="text-[10px] text-[#4A6B55] mt-1">✨ Te esperamos con los brazos abiertos ✨</p>
+                <p className="text-3xl font-serif font-bold text-[#0F1F18]">{CANTIDAD_PERSONAS}</p>
+                <p className="text-base font-medium text-[#2D3A32]">
+                  persona{CANTIDAD_PERSONAS !== 1 ? 's' : ''}
+                </p>
+                <p className="text-[10px] text-[#4A6B55] mt-2">✨ Te esperamos con los brazos abiertos ✨</p>
               </div>
               
-              {/* Detalles del evento */}
               <div className="bg-white/80 rounded-2xl p-3 mb-5 border border-[#A8E1B5]/30">
                 <h3 className="text-[10px] font-bold text-[#4A6B55] uppercase tracking-wider text-center mb-2">
                   📋 Resumen del Evento
@@ -97,7 +95,6 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
                 </div>
               </div>
               
-              {/* Botón confirmar */}
               <button
                 onClick={handleConfirmAndSend}
                 className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#4A6B55] to-[#2D3A32] text-white font-bold text-xs uppercase tracking-wider transition-all hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2 active:scale-95"
@@ -107,7 +104,6 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
               </button>
             </>
           ) : (
-            /* Pantalla de confirmación exitosa - SIN CIERRE AUTOMÁTICO */
             <div className="text-center py-6 animate-bounceIn">
               <div className="w-24 h-24 rounded-full bg-[#A8E1B5] mx-auto mb-5 flex items-center justify-center">
                 <Heart size={40} className="text-white" />
@@ -119,6 +115,9 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
                 </p>
                 <p className="text-[#5A7D66] text-base font-serif italic">
                   "Te esperamos para celebrar juntos"
+                </p>
+                <p className="text-[11px] text-[#4A6B55] mt-3 font-medium">
+                  🎉 {CANTIDAD_PERSONAS} persona{CANTIDAD_PERSONAS !== 1 ? 's' : ''} confirmada{CANTIDAD_PERSONAS !== 1 ? 's' : ''}
                 </p>
               </div>
               
@@ -133,7 +132,6 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
             </div>
           )}
           
-          {/* Footer */}
           {!showSuccess && (
             <p className="text-[7px] text-center text-[#4A6B55] mt-4 opacity-60">
               ✨ Los esperamos para compartir juntos este día tan especial ✨
@@ -183,7 +181,6 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
           animation: bounceIn 0.5s ease-out;
         }
         
-        /* Responsive para móviles */
         @media (max-width: 640px) {
           .animate-slideUp {
             animation: slideUp 0.3s ease-out;

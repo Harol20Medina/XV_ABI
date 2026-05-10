@@ -37,12 +37,52 @@ function useCountdown(targetDate) {
   return timeLeft;
 }
 
+// 📞 BASE DE DATOS DE INVITADOS - Aquí defines cuántas personas por número
+const invitadosPorNumero = {
+  "51934119126": { cantidad: 2, nombre: "Familiar 1" },      // Número de los padres
+  "51927974457": { cantidad: 4, nombre: "Invitado Especial" }, // 927974457
+  "51925564716": { cantidad: 2, nombre: "Familiar 2" },      // 925564716
+  "51987654321": { cantidad: 3, nombre: "Amigo 1" },         // Ejemplo adicional
+  "51912345678": { cantidad: 5, nombre: "Familia Grande" },  // Ejemplo adicional
+  // Agrega más números aquí con sus respectivas cantidades
+};
+
+// Función para obtener el número de WhatsApp actual
+const obtenerNumeroWhatsApp = () => {
+  // Intenta obtener el número de diferentes maneras
+  const params = new URLSearchParams(window.location.search);
+  const numeroFromURL = params.get('numero');
+  
+  if (numeroFromURL) {
+    return numeroFromURL;
+  }
+  
+  // Si no hay número en URL, puedes usar un número por defecto o pedirlo
+  return null;
+};
+
 export default function App() {
   const audioRef = useRef(null);
   const countdown = useCountdown(eventDate);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showTarjeta, setShowTarjeta] = useState(false);
-  const [invitadoData, setInvitadoData] = useState(null);
+  const [cantidadInvitado, setCantidadInvitado] = useState(2);
+  const [nombreInvitado, setNombreInvitado] = useState("");
+  const [numeroActual, setNumeroActual] = useState(null);
+
+  useEffect(() => {
+    // Al cargar la página, detectamos el número
+    const numero = obtenerNumeroWhatsApp();
+    if (numero && invitadosPorNumero[numero]) {
+      setCantidadInvitado(invitadosPorNumero[numero].cantidad);
+      setNombreInvitado(invitadosPorNumero[numero].nombre);
+      setNumeroActual(numero);
+    } else {
+      // Si no hay número o no está registrado, usar cantidad por defecto (2 personas)
+      setCantidadInvitado(2);
+      setNombreInvitado("Invitado");
+    }
+  }, []);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -65,9 +105,8 @@ export default function App() {
     }
   };
 
-  const handleConfirmacion = (mensaje) => {
-    setInvitadoData({ mensaje });
-    console.log('Confirmación recibida con mensaje:', mensaje);
+  const handleConfirmacion = (cantidad) => {
+    console.log('Confirmación recibida para', cantidad, 'personas');
   };
 
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
@@ -98,7 +137,7 @@ export default function App() {
           
           <header className="pt-16 pb-6 px-8 text-center">
             <Crown className="w-14 h-14 text-[#1A2F1A] mx-auto mb-6 opacity-90" />
-            <p className="text-[24px] uppercase tracking-[0.7em] text-[#1A2F1A] mb-6 font-semibold">Mis XV Años</p>
+            <p className="text-[14px] uppercase tracking-[0.7em] text-[#1A2F1A] mb-6 font-semibold">Mis XV Años</p>
             <h1 className="text-7xl font-serif text-[#0A1A12] mb-8 tracking-tight">Abigail</h1>
             <div className="relative mx-auto w-64 h-[400px]">
               <div className="absolute inset-0 border border-[#A8E1B5]/40 -m-3 rounded-t-full"></div>
@@ -241,17 +280,28 @@ export default function App() {
 
           <section className="px-8 py-8 text-center">
             <div className="bg-[#A8E1B5] text-white p-8 rounded-[3rem] shadow-xl">
-               <MessageCircle size={28} className="mx-auto mb-4 text-[#0A1A12]" />
-               <h3 className="font-serif text-3xl mb-3 italic text-[#0A1A12]">Asistencia</h3>
-               <p className="text-[8px] uppercase tracking-widest mb-5 font-bold opacity-90 text-[#0A1A12]">Confirmar antes del 17 de Mayo</p>
-               {/* Botón cambiado de <a> a <button> para abrir el modal */}
+               <MessageCircle size={28} className="mx-auto mb-4" />
+               <h3 className="font-serif text-3xl mb-3 italic">Asistencia</h3>
+               <p className="text-[8px] uppercase tracking-widest mb-5 font-bold opacity-90">Confirmar antes del 17 de Mayo</p>
+               
+               {/* Mostrar información personalizada según el número */}
+               {numeroActual && invitadosPorNumero[numeroActual] ? (
+                 <div className="mb-4 p-3 bg-white/20 rounded-xl">
+                   <p className="text-[10px] font-bold">✨ Invitación especial para {nombreInvitado} ✨</p>
+                 </div>
+               ) : (
+                 <div className="mb-4 p-3 bg-white/20 rounded-xl">
+                   <p className="text-[10px] font-bold">✨ Invitación General ✨</p>
+                 </div>
+               )}
+               
                <button 
                  onClick={() => setShowTarjeta(true)}
                  className="inline-block w-full py-4 bg-white text-[#6BA37A] rounded-full text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-[#F0F4F1]"
                >
                  Confirmar asistencia por WhatsApp
                </button>
-               
+               <p className="text-[8px] mt-3 opacity-70">✨ +51 934 119 126 ✨</p>
             </div>
           </section>
 
@@ -287,8 +337,8 @@ export default function App() {
             
             <div className="mt-10">
               <div className="w-12 h-px bg-[#A8E1B5] mx-auto mb-5"></div>
-              <p className="font-serif text-6xl text-[#1A2F1A] italic">Abigail</p>
-              <p className="text-[24px] text-[#1A2F1A] mt-2">✦ XV Años ✦</p>
+              <p className="font-serif text-5xl text-[#1A2F1A] italic">Abigail</p>
+              <p className="text-[12px] text-[#1A2F1A] mt-2">✦ XV Años ✦</p>
             </div>
           </footer>
         </div>
@@ -296,11 +346,12 @@ export default function App() {
         <audio ref={audioRef} src="music.mpeg" loop preload="auto" />
       </div>
 
-      {/* Tarjeta de invitación modal */}
+      {/* Tarjeta de invitación modal con la cantidad según el número */}
       <TarjetaInvitacion 
         isOpen={showTarjeta}
         onClose={() => setShowTarjeta(false)}
         onConfirm={handleConfirmacion}
+        cantidadPersonas={cantidadInvitado}
       />
 
       <style>{`
