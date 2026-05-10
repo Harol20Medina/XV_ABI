@@ -287,8 +287,8 @@ export default function App() {
             
             <div className="mt-10">
               <div className="w-12 h-px bg-[#A8E1B5] mx-auto mb-5"></div>
-              <p className="font-serif text-5xl text-[#1A2F1A] italic">Abigail</p>
-              <p className="text-[12px] text-[#1A2F1A] mt-2">✦ XV Años ✦</p>
+              <p className="font-serif text-6xl text-[#1A2F1A] italic">Abigail</p>
+              <p className="text-[24px] text-[#1A2F1A] mt-2">✦ XV Años ✦</p>
             </div>
           </footer>
         </div>
