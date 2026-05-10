@@ -98,7 +98,7 @@ export default function App() {
           
           <header className="pt-16 pb-6 px-8 text-center">
             <Crown className="w-14 h-14 text-[#1A2F1A] mx-auto mb-6 opacity-90" />
-            <p className="text-[14px] uppercase tracking-[0.7em] text-[#1A2F1A] mb-6 font-semibold">Mis XV Años</p>
+            <p className="text-[24px] uppercase tracking-[0.7em] text-[#1A2F1A] mb-6 font-semibold">Mis XV Años</p>
             <h1 className="text-7xl font-serif text-[#0A1A12] mb-8 tracking-tight">Abigail</h1>
             <div className="relative mx-auto w-64 h-[400px]">
               <div className="absolute inset-0 border border-[#A8E1B5]/40 -m-3 rounded-t-full"></div>
