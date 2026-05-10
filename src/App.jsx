@@ -241,9 +241,9 @@ export default function App() {
 
           <section className="px-8 py-8 text-center">
             <div className="bg-[#A8E1B5] text-white p-8 rounded-[3rem] shadow-xl">
-               <MessageCircle size={28} className="mx-auto mb-4" />
-               <h3 className="font-serif text-3xl mb-3 italic">Asistencia</h3>
-               <p className="text-[8px] uppercase tracking-widest mb-5 font-bold opacity-90">Confirmar antes del 17 de Mayo</p>
+               <MessageCircle size={28} className="mx-auto mb-4 text-[#0A1A12]" />
+               <h3 className="font-serif text-3xl mb-3 italic text-[#0A1A12]">Asistencia</h3>
+               <p className="text-[8px] uppercase tracking-widest mb-5 font-bold opacity-90 text-[#0A1A12]">Confirmar antes del 17 de Mayo</p>
                {/* Botón cambiado de <a> a <button> para abrir el modal */}
                <button 
                  onClick={() => setShowTarjeta(true)}
@@ -251,7 +251,7 @@ export default function App() {
                >
                  Confirmar asistencia por WhatsApp
                </button>
-               <p className="text-[8px] mt-3 opacity-70">✨ +51 934 119 126 ✨</p>
+               
             </div>
           </section>
 
