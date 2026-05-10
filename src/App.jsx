@@ -37,30 +37,22 @@ function useCountdown(targetDate) {
   return timeLeft;
 }
 
-// 📞 BASE DE DATOS DE INVITADOS - Define aquí los números y sus cantidades
-// IMPORTANTE: Los números deben tener el código de país (51 para Perú) sin el signo +
-const invitadosPorNumero = {
-  "51934119126": { cantidad: 2, nombre: "Familia Principal" },
-  "51927974457": { cantidad: 4, nombre: "Invitado Especial 1" },
-  "51925564716": { cantidad: 2, nombre: "Invitado Especial 2" },
-  // Agrega más números aquí con sus cantidades específicas
-  // "519xxxxxxxxx": { cantidad: 3, nombre: "Nombre del invitado" },
-};
-
-// Función para obtener el número de WhatsApp actual desde la URL
-const obtenerNumeroWhatsApp = () => {
+// Función para obtener la cantidad desde la URL (?cantidad=3)
+const obtenerCantidadDesdeURL = () => {
   const params = new URLSearchParams(window.location.search);
-  let numero = params.get('numero');
+  let cantidad = params.get('cantidad');
   
-  if (numero) {
-    // Limpiar el número: eliminar espacios, guiones, etc.
-    numero = numero.replace(/\s/g, '').replace(/-/g, '');
-    console.log("📞 Número detectado:", numero);
-    return numero;
+  if (cantidad) {
+    cantidad = parseInt(cantidad);
+    // Validar que sea un número entre 1 y 5
+    if (cantidad >= 1 && cantidad <= 5) {
+      console.log(`📊 Cantidad detectada: ${cantidad} personas`);
+      return cantidad;
+    }
   }
   
-  console.log("⚠️ No se encontró número en la URL");
-  return null;
+  console.log(`⚠️ Sin cantidad válida en URL, usando 2 personas por defecto`);
+  return 2; // Valor por defecto
 };
 
 export default function App() {
@@ -69,26 +61,11 @@ export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showTarjeta, setShowTarjeta] = useState(false);
   const [cantidadInvitado, setCantidadInvitado] = useState(2);
-  const [nombreInvitado, setNombreInvitado] = useState("");
 
   useEffect(() => {
-    // Al cargar la página, detectamos el número
-    const numero = obtenerNumeroWhatsApp();
-    
-    if (numero && invitadosPorNumero[numero]) {
-      const datos = invitadosPorNumero[numero];
-      setCantidadInvitado(datos.cantidad);
-      setNombreInvitado(datos.nombre);
-      console.log(`✅ ${datos.nombre} → ${datos.cantidad} personas`);
-    } else if (numero) {
-      console.warn(`❌ Número ${numero} no encontrado, usando 2 personas por defecto`);
-      setCantidadInvitado(2);
-      setNombreInvitado("Invitado");
-    } else {
-      console.log(`ℹ️ Sin número en URL, usando 2 personas por defecto`);
-      setCantidadInvitado(2);
-      setNombreInvitado("Invitado");
-    }
+    // Al cargar la página, detectamos la cantidad desde la URL
+    const cantidad = obtenerCantidadDesdeURL();
+    setCantidadInvitado(cantidad);
   }, []);
 
   const togglePlay = () => {
@@ -291,12 +268,10 @@ export default function App() {
                <h3 className="font-serif text-3xl mb-3 italic">Asistencia</h3>
                <p className="text-[8px] uppercase tracking-widest mb-5 font-bold opacity-90">Confirmar antes del 17 de Mayo</p>
                
-               {/* Mostrar información personalizada según el número */}
-               {nombreInvitado && (
-                 <div className="mb-4 p-3 bg-white/20 rounded-xl">
-                   <p className="text-[10px] font-bold">✨ Invitación especial para {nombreInvitado} ✨</p>
-                 </div>
-               )}
+               {/* Mostrar cantidad actual */}
+               <div className="mb-4 p-3 bg-white/20 rounded-xl">
+                 <p className="text-[10px] font-bold">✨ Invitación para {cantidadInvitado} persona{cantidadInvitado !== 1 ? 's' : ''} ✨</p>
+               </div>
                
                <button 
                  onClick={() => setShowTarjeta(true)}
@@ -349,7 +324,7 @@ export default function App() {
         <audio ref={audioRef} src="music.mpeg" loop preload="auto" />
       </div>
 
-      {/* Tarjeta de invitación modal con la cantidad según el número */}
+      {/* Tarjeta de invitación modal con la cantidad específica */}
       <TarjetaInvitacion 
         isOpen={showTarjeta}
         onClose={() => setShowTarjeta(false)}
