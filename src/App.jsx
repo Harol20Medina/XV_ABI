@@ -37,27 +37,29 @@ function useCountdown(targetDate) {
   return timeLeft;
 }
 
-// 📞 BASE DE DATOS DE INVITADOS - Aquí defines cuántas personas por número
+// 📞 BASE DE DATOS DE INVITADOS - Define aquí los números y sus cantidades
+// IMPORTANTE: Los números deben tener el código de país (51 para Perú) sin el signo +
 const invitadosPorNumero = {
-  "51934119126": { cantidad: 2, nombre: "Familiar 1" },      // Número de los padres
-  "51927974457": { cantidad: 4, nombre: "Invitado Especial" }, // 927974457
-  "51925564716": { cantidad: 2, nombre: "Familiar 2" },      // 925564716
-  "51987654321": { cantidad: 3, nombre: "Amigo 1" },         // Ejemplo adicional
-  "51912345678": { cantidad: 5, nombre: "Familia Grande" },  // Ejemplo adicional
-  // Agrega más números aquí con sus respectivas cantidades
+  "51934119126": { cantidad: 2, nombre: "Familia Principal" },
+  "51927974457": { cantidad: 4, nombre: "Invitado Especial 1" },
+  "51925564716": { cantidad: 2, nombre: "Invitado Especial 2" },
+  // Agrega más números aquí con sus cantidades específicas
+  // "519xxxxxxxxx": { cantidad: 3, nombre: "Nombre del invitado" },
 };
 
-// Función para obtener el número de WhatsApp actual
+// Función para obtener el número de WhatsApp actual desde la URL
 const obtenerNumeroWhatsApp = () => {
-  // Intenta obtener el número de diferentes maneras
   const params = new URLSearchParams(window.location.search);
-  const numeroFromURL = params.get('numero');
+  let numero = params.get('numero');
   
-  if (numeroFromURL) {
-    return numeroFromURL;
+  if (numero) {
+    // Limpiar el número: eliminar espacios, guiones, etc.
+    numero = numero.replace(/\s/g, '').replace(/-/g, '');
+    console.log("📞 Número detectado:", numero);
+    return numero;
   }
   
-  // Si no hay número en URL, puedes usar un número por defecto o pedirlo
+  console.log("⚠️ No se encontró número en la URL");
   return null;
 };
 
@@ -68,17 +70,22 @@ export default function App() {
   const [showTarjeta, setShowTarjeta] = useState(false);
   const [cantidadInvitado, setCantidadInvitado] = useState(2);
   const [nombreInvitado, setNombreInvitado] = useState("");
-  const [numeroActual, setNumeroActual] = useState(null);
 
   useEffect(() => {
     // Al cargar la página, detectamos el número
     const numero = obtenerNumeroWhatsApp();
+    
     if (numero && invitadosPorNumero[numero]) {
-      setCantidadInvitado(invitadosPorNumero[numero].cantidad);
-      setNombreInvitado(invitadosPorNumero[numero].nombre);
-      setNumeroActual(numero);
+      const datos = invitadosPorNumero[numero];
+      setCantidadInvitado(datos.cantidad);
+      setNombreInvitado(datos.nombre);
+      console.log(`✅ ${datos.nombre} → ${datos.cantidad} personas`);
+    } else if (numero) {
+      console.warn(`❌ Número ${numero} no encontrado, usando 2 personas por defecto`);
+      setCantidadInvitado(2);
+      setNombreInvitado("Invitado");
     } else {
-      // Si no hay número o no está registrado, usar cantidad por defecto (2 personas)
+      console.log(`ℹ️ Sin número en URL, usando 2 personas por defecto`);
       setCantidadInvitado(2);
       setNombreInvitado("Invitado");
     }
@@ -106,7 +113,7 @@ export default function App() {
   };
 
   const handleConfirmacion = (cantidad) => {
-    console.log('Confirmación recibida para', cantidad, 'personas');
+    console.log('✅ Confirmación recibida para', cantidad, 'personas');
   };
 
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
@@ -285,13 +292,9 @@ export default function App() {
                <p className="text-[8px] uppercase tracking-widest mb-5 font-bold opacity-90">Confirmar antes del 17 de Mayo</p>
                
                {/* Mostrar información personalizada según el número */}
-               {numeroActual && invitadosPorNumero[numeroActual] ? (
+               {nombreInvitado && (
                  <div className="mb-4 p-3 bg-white/20 rounded-xl">
                    <p className="text-[10px] font-bold">✨ Invitación especial para {nombreInvitado} ✨</p>
-                 </div>
-               ) : (
-                 <div className="mb-4 p-3 bg-white/20 rounded-xl">
-                   <p className="text-[10px] font-bold">✨ Invitación General ✨</p>
                  </div>
                )}
                

@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { X, Heart, MapPin, Calendar, Clock, Send, Crown, Sparkles, Users } from 'lucide-react';
 
-// 👇 AQUÍ CAMBIAS LA CANTIDAD DE PERSONAS FÁCILMENTE
-const CANTIDAD_PERSONAS = 3; // Cambia este número: 2, 3, 4, 5, etc.
-
-const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
+const TarjetaInvitacion = ({ isOpen, onClose, onConfirm, cantidadPersonas = 2 }) => {
   const [showSuccess, setShowSuccess] = useState(false);
 
   if (!isOpen) return null;
@@ -16,7 +13,7 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
     const mensajeWhatsApp = encodeURIComponent(
       `✨ Confirmación de Asistencia - XV Años de Abigail ✨\n\n` +
       `¡Hola! Quiero confirmar mi asistencia a los XV años de Abigail. 🎉\n\n` +
-      `✅ Invitación válida para ${CANTIDAD_PERSONAS} persona${CANTIDAD_PERSONAS !== 1 ? 's' : ''}\n\n` +
+      `✅ Invitación válida para ${cantidadPersonas} persona${cantidadPersonas !== 1 ? 's' : ''}\n\n` +
       `¡No me lo pierdo por nada! 💃🎉\n\n` +
       `🌟 ¡Qué comience la fiesta! 🌟`
     );
@@ -24,7 +21,7 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
     const whatsappNumber = "51934119126";
     const whatsappLink = `https://wa.me/${whatsappNumber}?text=${mensajeWhatsApp}`;
     
-    if (onConfirm) onConfirm();
+    if (onConfirm) onConfirm(cantidadPersonas);
     window.open(whatsappLink, '_blank');
   };
 
@@ -71,9 +68,9 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
                   <Users size={18} className="text-[#4A6B55]" />
                   <span className="text-sm font-bold text-[#2D3A32]">Invitación válida para</span>
                 </div>
-                <p className="text-3xl font-serif font-bold text-[#0F1F18]">{CANTIDAD_PERSONAS}</p>
+                <p className="text-3xl font-serif font-bold text-[#0F1F18]">{cantidadPersonas}</p>
                 <p className="text-base font-medium text-[#2D3A32]">
-                  persona{CANTIDAD_PERSONAS !== 1 ? 's' : ''}
+                  persona{cantidadPersonas !== 1 ? 's' : ''}
                 </p>
                 <p className="text-[10px] text-[#4A6B55] mt-2">✨ Te esperamos con los brazos abiertos ✨</p>
               </div>
@@ -117,7 +114,7 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm }) => {
                   "Te esperamos para celebrar juntos"
                 </p>
                 <p className="text-[11px] text-[#4A6B55] mt-3 font-medium">
-                  🎉 {CANTIDAD_PERSONAS} persona{CANTIDAD_PERSONAS !== 1 ? 's' : ''} confirmada{CANTIDAD_PERSONAS !== 1 ? 's' : ''}
+                  🎉 {cantidadPersonas} persona{cantidadPersonas !== 1 ? 's' : ''} confirmada{cantidadPersonas !== 1 ? 's' : ''}
                 </p>
               </div>
               
