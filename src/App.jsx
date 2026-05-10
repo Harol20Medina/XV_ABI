@@ -11,6 +11,7 @@ import {
   Music,
   Sparkles
 } from 'lucide-react';
+import TarjetaInvitacion from './TarjetaInvitacion';
 
 const eventDate = new Date('2026-05-24T17:00:00');
 
@@ -40,6 +41,8 @@ export default function App() {
   const audioRef = useRef(null);
   const countdown = useCountdown(eventDate);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [showTarjeta, setShowTarjeta] = useState(false);
+  const [invitadoData, setInvitadoData] = useState(null);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -62,12 +65,13 @@ export default function App() {
     }
   };
 
+  const handleConfirmacion = (mensaje) => {
+    setInvitadoData({ mensaje });
+    console.log('Confirmación recibida con mensaje:', mensaje);
+  };
+
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const startDayPadding = 5;
-
-  const whatsappNumber = "51934119126";
-  const whatsappMessage = encodeURIComponent("¡Hola! ✨ Quiero confirmar mi asistencia a los XV años de Abigail. ¡No me lo pierdo por nada! 💃🎉");
-  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   const recuerdoFotos = [
     { src: "abichita1.jpeg", edad: "2 años", descripcion: "Mis primeros pasos" },
@@ -77,7 +81,7 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#DCE4DE] flex justify-center p-0 sm:p-6 text-[#0F1F18]">
+    <div className="min-h-screen bg-[#DCE4DE] flex justify-center p-0 sm:p-6">
       <div 
         className="relative w-full max-w-md bg-white shadow-2xl overflow-hidden min-h-screen sm:min-h-0 sm:rounded-[3.5rem] border border-[#A8E1B5]/10 flex flex-col"
         style={{
@@ -93,12 +97,9 @@ export default function App() {
         <div className="relative z-10 flex flex-col pb-16">
           
           <header className="pt-16 pb-6 px-8 text-center">
-            {/* Corona 2 tonos más oscura */}
-            <Crown className="w-8 h-8 text-[#5A7D66] mx-auto mb-6 opacity-80" />
-            {/* Mis XV Años - 2 tonos más oscuro */}
-            <p className="text-[10px] uppercase tracking-[0.7em] text-[#4A6B55] mb-6 font-semibold">Mis XV Años</p>
-            {/* Abigail - 2 tonos más oscuro */}
-            <h1 className="text-6xl font-serif text-[#0F1F18] mb-8 tracking-tight">Abigail</h1>
+            <Crown className="w-14 h-14 text-[#1A2F1A] mx-auto mb-6 opacity-90" />
+            <p className="text-[14px] uppercase tracking-[0.7em] text-[#1A2F1A] mb-6 font-semibold">Mis XV Años</p>
+            <h1 className="text-7xl font-serif text-[#0A1A12] mb-8 tracking-tight">Abigail</h1>
             <div className="relative mx-auto w-64 h-[400px]">
               <div className="absolute inset-0 border border-[#A8E1B5]/40 -m-3 rounded-t-full"></div>
               <div className="w-full h-full rounded-t-full overflow-hidden shadow-xl border-4 border-white">
@@ -109,11 +110,11 @@ export default function App() {
             <div className="mt-8 flex justify-center">
               <div className="bg-white/90 backdrop-blur-md rounded-full px-5 py-2 shadow-lg border border-[#A8E1B5]/40 inline-flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-[#A8E1B5]/20 flex items-center justify-center">
-                  <Music size={14} className="text-[#4A6B55]" />
+                  <Music size={14} className="text-[#1A2F1A]" />
                 </div>
                 <div className="text-left">
-                  <p className="text-[8px] uppercase tracking-wider text-[#4A6B55] font-bold">Canción</p>
-                  <p className="text-[10px] font-serif text-[#0F1F18]">Música especial</p>
+                  <p className="text-[8px] uppercase tracking-wider text-[#1A2F1A] font-bold">Canción</p>
+                  <p className="text-[10px] font-serif text-[#0A1A12]">Música especial</p>
                 </div>
                 <button
                   onClick={togglePlay}
@@ -128,40 +129,38 @@ export default function App() {
               </div>
             </div>
             
-            <p className="mt-8 text-[15px] font-light text-[#3D5A4A] italic max-w-xs mx-auto">
+            <p className="mt-8 text-[15px] font-light text-[#0A1A12] italic max-w-xs mx-auto">
               "Un día para soñar, un momento para recordar, y una vida entera para agradecer."
             </p>
           </header>
 
-          {/* Con el amor de mis padres - 2 tonos más oscuro */}
           <section className="py-10 px-8 text-center">
-            <Heart size={18} className="mx-auto mb-4 text-[#A8E1B5]" />
-            <p className="text-[9px] uppercase tracking-[0.3em] text-[#4A6B55] mb-6 font-bold">Con el amor de mis padres</p>
+            <Heart size={18} className="mx-auto mb-4 text-[#1A2F1A]" />
+            <p className="text-[9px] uppercase tracking-[0.3em] text-[#1A2F1A] mb-6 font-bold">Con el amor de mis padres</p>
             <div className="space-y-2">
-              <p className="text-xl font-serif text-[#0F1F18]">Elías Pastor Paz Suárez</p>
-              <p className="text-xl font-serif text-[#0F1F18]">Ruth Victoria Zárate Landa</p>
+              <p className="text-xl font-serif text-[#0A1A12]">Elías Pastor Paz Suárez</p>
+              <p className="text-xl font-serif text-[#0A1A12]">Ruth Victoria Zárate Landa</p>
             </div>
           </section>
 
-          {/* Falta muy poco para el gran día - 2 tonos más oscuro */}
           <section className="py-14 px-8 text-center bg-white/40 border-y border-[#A8E1B5]/10">
-            <p className="text-[10px] uppercase tracking-[0.4em] text-[#4A6B55] mb-6">Falta muy poco para el gran día</p>
+            <p className="text-[10px] uppercase tracking-[0.4em] text-[#1A2F1A] mb-6">Falta muy poco para el gran día</p>
             <div className="flex justify-between max-w-[280px] mx-auto gap-4">
               <div className="flex flex-col items-center">
-                <span className="text-5xl font-serif mb-1 text-[#0F1F18]">{countdown.days < 10 ? `0${countdown.days}` : countdown.days}</span>
-                <span className="text-[9px] uppercase tracking-widest text-[#4A6B55] font-bold">Días</span>
+                <span className="text-5xl font-serif mb-1 text-[#0A1A12]">{countdown.days < 10 ? `0${countdown.days}` : countdown.days}</span>
+                <span className="text-[9px] uppercase tracking-widest text-[#1A2F1A] font-bold">Días</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-5xl font-serif mb-1 text-[#0F1F18]">{countdown.hours < 10 ? `0${countdown.hours}` : countdown.hours}</span>
-                <span className="text-[9px] uppercase tracking-widest text-[#4A6B55] font-bold">Horas</span>
+                <span className="text-5xl font-serif mb-1 text-[#0A1A12]">{countdown.hours < 10 ? `0${countdown.hours}` : countdown.hours}</span>
+                <span className="text-[9px] uppercase tracking-widest text-[#1A2F1A] font-bold">Horas</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-5xl font-serif mb-1 text-[#0F1F18]">{countdown.minutes < 10 ? `0${countdown.minutes}` : countdown.minutes}</span>
-                <span className="text-[9px] uppercase tracking-widest text-[#4A6B55] font-bold">Min</span>
+                <span className="text-5xl font-serif mb-1 text-[#0A1A12]">{countdown.minutes < 10 ? `0${countdown.minutes}` : countdown.minutes}</span>
+                <span className="text-[9px] uppercase tracking-widest text-[#1A2F1A] font-bold">Min</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-5xl font-serif mb-1 text-[#0F1F18]">{countdown.seconds < 10 ? `0${countdown.seconds}` : countdown.seconds}</span>
-                <span className="text-[9px] uppercase tracking-widest text-[#4A6B55] font-bold">Seg</span>
+                <span className="text-5xl font-serif mb-1 text-[#0A1A12]">{countdown.seconds < 10 ? `0${countdown.seconds}` : countdown.seconds}</span>
+                <span className="text-[9px] uppercase tracking-widest text-[#1A2F1A] font-bold">Seg</span>
               </div>
             </div>
           </section>
@@ -169,37 +168,36 @@ export default function App() {
           <section className="py-16 px-8 text-center">
             <div className="flex flex-col items-center gap-4 mb-10">
               <div className="flex items-center gap-3 bg-white/60 px-4 py-2 rounded-full backdrop-blur-sm">
-                <Calendar size={18} className="text-[#4A6B55]" />
-                <span className="font-serif text-xl text-[#0F1F18]">Domingo 24 de Mayo, 2026</span>
+                <Calendar size={18} className="text-[#1A2F1A]" />
+                <span className="font-serif text-xl text-[#0A1A12]">Domingo 24 de Mayo, 2026</span>
               </div>
               <div className="flex items-center gap-3 bg-white/60 px-4 py-2 rounded-full backdrop-blur-sm">
-                <Clock size={18} className="text-[#4A6B55]" />
-                <span className="font-serif text-xl text-[#0F1F18]">5:00 PM</span>
+                <Clock size={18} className="text-[#1A2F1A]" />
+                <span className="font-serif text-xl text-[#0A1A12]">5:00 PM</span>
               </div>
             </div>
             
             <div className="bg-white/80 backdrop-blur p-6 rounded-3xl border border-[#A8E1B5]/30 max-w-[280px] mx-auto">
-              <p className="text-[10px] uppercase tracking-widest text-[#4A6B55] mb-4 font-bold">Mayo 2026</p>
-              <div className="grid grid-cols-7 gap-y-2 text-[9px] font-medium text-stone-500">
+              <p className="text-[10px] uppercase tracking-widest text-[#1A2F1A] mb-4 font-bold">Mayo 2026</p>
+              <div className="grid grid-cols-7 gap-y-2 text-[9px] font-medium text-stone-600">
                 <span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span>
                 {Array(startDayPadding).fill(null).map((_, i) => <span key={i}></span>)}
                 {days.map(day => (
                   <span key={day} className={`h-7 w-7 flex items-center justify-center mx-auto rounded-full text-xs transition-all ${
                     day === 24 
                       ? 'bg-[#A8E1B5] text-white font-bold shadow-md scale-110 ring-2 ring-[#6BA37A]/30' 
-                      : 'text-[#0F1F18]'
+                      : 'text-[#0A1A12]'
                   }`}>
                     {day}
                   </span>
                 ))}
               </div>
               <div className="mt-4 pt-3 border-t border-[#A8E1B5]/20">
-                <p className="text-[9px] text-[#4A6B55] font-semibold">🎉 Día especial marcado 🎉</p>
+                <p className="text-[9px] text-[#1A2F1A] font-semibold">🎉 Día especial marcado 🎉</p>
               </div>
             </div>
           </section>
 
-          {/* Vestimenta con iconos */}
           <section className="px-8 py-6 text-center">
             <div className="bg-white/70 backdrop-blur-md p-6 rounded-3xl shadow-lg border border-[#A8E1B5]/20">
               <div className="flex items-center justify-center gap-10 mb-3">
@@ -212,26 +210,23 @@ export default function App() {
                 </div>
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#A8E1B5] to-[#6BA37A] flex items-center justify-center shadow-lg p-2">
                   <img 
-                    src="https://iconscout.com/icon/vestido-icon_11345280"
+                    src="https://cdn-icons-png.flaticon.com/128/26/26819.png"
                     alt="Vestido"
                     className="w-10 h-10 object-contain"
-                    onError={(e) => {
-                      e.target.src = "https://cdn-icons-png.flaticon.com/128/26/26819.png";
-                    }}
                   />
                 </div>
               </div>
-              <h3 className="font-serif text-2xl mb-2 italic text-[#0F1F18]">Vestimenta</h3>
-              <p className="text-[11px] uppercase tracking-widest text-[#4A6B55] font-bold mb-3">Sport Elegante</p>
+              <h3 className="font-serif text-2xl mb-2 italic text-[#0A1A12]">Vestimenta</h3>
+              <p className="text-[11px] uppercase tracking-widest text-[#1A2F1A] font-bold mb-3">Sport Elegante</p>
               <p className="text-[12px] text-stone-600 italic">✨ Cómodos pero elegantes, queremos verte brillar ✨</p>
             </div>
           </section>
 
           <section className="px-8 py-6">
             <div className="bg-white/80 backdrop-blur-md p-8 rounded-[3rem] shadow-lg border border-[#A8E1B5]/20 text-center">
-              <MapPin size={24} className="mx-auto text-[#4A6B55] mb-4" />
-              <h3 className="font-serif text-2xl mb-3 italic text-[#0F1F18]">Recepción</h3>
-              <p className="text-[10px] font-bold text-[#4A6B55] tracking-widest mb-2 uppercase">Asociación Santa Rosa</p>
+              <MapPin size={24} className="mx-auto text-[#1A2F1A] mb-4" />
+              <h3 className="font-serif text-2xl mb-3 italic text-[#0A1A12]">Recepción</h3>
+              <p className="text-[10px] font-bold text-[#1A2F1A] tracking-widest mb-2 uppercase">Asociación Santa Rosa</p>
               <p className="text-xs text-stone-600 mb-6 font-light">Jr. Las Hortensias 123, Urb. San Ignacio</p>
               <a 
                 href="https://maps.app.goo.gl/P7cct6BP4A2Rzjk46" 
@@ -249,27 +244,24 @@ export default function App() {
                <MessageCircle size={28} className="mx-auto mb-4" />
                <h3 className="font-serif text-3xl mb-3 italic">Asistencia</h3>
                <p className="text-[8px] uppercase tracking-widest mb-5 font-bold opacity-90">Confirmar antes del 17 de Mayo</p>
-               <a 
-                 href={whatsappLink}
-                 target="_blank"
-                 rel="noopener noreferrer"
+               {/* Botón cambiado de <a> a <button> para abrir el modal */}
+               <button 
+                 onClick={() => setShowTarjeta(true)}
                  className="inline-block w-full py-4 bg-white text-[#6BA37A] rounded-full text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-[#F0F4F1]"
                >
                  Confirmar asistencia por WhatsApp
-               </a>
+               </button>
                <p className="text-[8px] mt-3 opacity-70">✨ +51 934 119 126 ✨</p>
             </div>
           </section>
 
-          {/* Recuerdos - ✨ Momentos que atesoro ✨ 2 tonos más oscuro */}
           <footer className="px-8 py-12 text-center">
             <div className="flex items-center justify-center gap-2 mb-5">
-              <Sparkles size={16} className="text-[#A8E1B5]" />
-              <h3 className="font-serif text-3xl italic text-[#0F1F18]">Recuerdos</h3>
-              <Sparkles size={16} className="text-[#A8E1B5]" />
+              <Sparkles size={16} className="text-[#1A2F1A]" />
+              <h3 className="font-serif text-3xl italic text-[#0A1A12]">Recuerdos</h3>
+              <Sparkles size={16} className="text-[#1A2F1A]" />
             </div>
-            {/* ✨ Momentos que atesoro ✨ - 2 tonos más oscuro */}
-            <p className="text-[9px] uppercase tracking-widest text-[#4A6B55] mb-6 font-bold">✨ Momentos que atesoro ✨</p>
+            <p className="text-[9px] uppercase tracking-widest text-[#1A2F1A] mb-6 font-bold">✨ Momentos que atesoro ✨</p>
             
             <div className="flex flex-col gap-5 max-w-[300px] mx-auto">
               {recuerdoFotos.map((foto, index) => (
@@ -295,16 +287,21 @@ export default function App() {
             
             <div className="mt-10">
               <div className="w-12 h-px bg-[#A8E1B5] mx-auto mb-5"></div>
-              {/* Abigail - 2 tonos más oscuro */}
-              <p className="font-serif text-4xl text-[#5A7D66] italic">Abigail</p>
-              {/* ✦ XV Años ✦ - 2 tonos más oscuro */}
-              <p className="text-[8px] text-[#4A6B55] mt-2">✦ XV Años ✦</p>
+              <p className="font-serif text-5xl text-[#1A2F1A] italic">Abigail</p>
+              <p className="text-[12px] text-[#1A2F1A] mt-2">✦ XV Años ✦</p>
             </div>
           </footer>
         </div>
 
         <audio ref={audioRef} src="music.mpeg" loop preload="auto" />
       </div>
+
+      {/* Tarjeta de invitación modal */}
+      <TarjetaInvitacion 
+        isOpen={showTarjeta}
+        onClose={() => setShowTarjeta(false)}
+        onConfirm={handleConfirmacion}
+      />
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
