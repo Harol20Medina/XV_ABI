@@ -264,14 +264,10 @@ export default function App() {
 
           <section className="px-8 py-8 text-center">
             <div className="bg-[#A8E1B5] text-white p-8 rounded-[3rem] shadow-xl">
-               <MessageCircle size={28} className="mx-auto mb-4" />
-               <h3 className="font-serif text-3xl mb-3 italic">Asistencia</h3>
-               <p className="text-[8px] uppercase tracking-widest mb-5 font-bold opacity-90">Confirmar antes del 17 de Mayo</p>
+               <MessageCircle size={28} className="mx-auto mb-4 text-[#0A1A12]" />
+               <h3 className="font-serif text-3xl mb-3 italic text-[#0A1A12]">Asistencia</h3>
+               <p className="text-[8px] uppercase tracking-widest mb-5 font-bold opacity-90 text-[#0A1A12]">Confirmar antes del 17 de Mayo</p>
                
-               {/* Mostrar cantidad actual */}
-               <div className="mb-4 p-3 bg-white/20 rounded-xl">
-                 <p className="text-[10px] font-bold">✨ Invitación para {cantidadInvitado} persona{cantidadInvitado !== 1 ? 's' : ''} ✨</p>
-               </div>
                
                <button 
                  onClick={() => setShowTarjeta(true)}
@@ -279,7 +275,6 @@ export default function App() {
                >
                  Confirmar asistencia por WhatsApp
                </button>
-               <p className="text-[8px] mt-3 opacity-70">✨ +51 934 119 126 ✨</p>
             </div>
           </section>
 
@@ -315,8 +310,8 @@ export default function App() {
             
             <div className="mt-10">
               <div className="w-12 h-px bg-[#A8E1B5] mx-auto mb-5"></div>
-              <p className="font-serif text-5xl text-[#1A2F1A] italic">Abigail</p>
-              <p className="text-[12px] text-[#1A2F1A] mt-2">✦ XV Años ✦</p>
+              <p className="font-serif text-6xl text-[#1A2F1A] italic">Abigail</p>
+              <p className="text-[24px] text-[#1A2F1A] mt-2">✦ XV Años ✦</p>
             </div>
           </footer>
         </div>

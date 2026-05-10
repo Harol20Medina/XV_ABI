@@ -11,11 +11,9 @@ const TarjetaInvitacion = ({ isOpen, onClose, onConfirm, cantidadPersonas = 2 })
     
     // Mensaje personalizado para WhatsApp con la cantidad dinámica
     const mensajeWhatsApp = encodeURIComponent(
-      `✨ Confirmación de Asistencia - XV Años de Abigail ✨\n\n` +
       `¡Hola! Quiero confirmar mi asistencia a los XV años de Abigail. 🎉\n\n` +
       `✅ Invitación válida para ${cantidadPersonas} persona${cantidadPersonas !== 1 ? 's' : ''}\n\n` +
-      `¡No me lo pierdo por nada! 💃🎉\n\n` +
-      `🌟 ¡Qué comience la fiesta! 🌟`
+      `¡No me lo pierdo por nada! 💃🎉`
     );
     
     const whatsappNumber = "51934119126";
